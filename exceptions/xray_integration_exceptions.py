@@ -1,0 +1,2 @@
+class XrayIntegrationError(Exception):
+    pass

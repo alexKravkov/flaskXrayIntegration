@@ -1,0 +1,77 @@
+[
+  {
+    "component_id": "npm://react",
+    "vulnerabilities": [
+      {
+        "cve": "CVE-0000-10000",
+        "version": "16.13.1",
+        "type": "security",
+        "source_id": "200",
+        "summary": "First fake vulnerability",
+        "description": "A description of the first fake vulnerability",
+        "cvss_v2": "7.9",
+        "cvss_v3": "9.1",
+        "severity": "critical",
+        "url": "http://more.info",
+        "publish_date": "2021-11-04T07:30:51.991+00:00",
+        "references": [
+          "http://jfrog.com"
+        ]
+      },
+      {
+        "cve": "CVE-0000-10001",
+        "version": "16.13.1",
+        "type": "security",
+        "source_id": "201",
+        "summary": "Second fake vulnerability",
+        "description": "A description of the second fake vulnerability",
+        "cvss_v2": "7.9",
+        "cvss_v3": "9.1",
+        "severity": "critical",
+        "url": "http://more.info",
+        "publish_date": "2021-11-05T07:30:51.991+00:00",
+        "references": [
+          "http://jfrog.com"
+        ]
+      },
+      {
+        "cve": "CVE-0000-10001",
+        "version": "17.0.0",
+        "type": "security",
+        "source_id": "201",
+        "summary": "Second fake vulnerability",
+        "description": "A description of the second fake vulnerability",
+        "cvss_v2": "7.9",
+        "cvss_v3": "9.1",
+        "severity": "critical",
+        "url": "http://more.info",
+        "publish_date": "2021-11-05T07:30:51.991+00:00",
+        "references": [
+          "http://jfrog.com"
+        ]
+      }
+    ]
+  },
+  {
+    "component_id": "npm://someComponent",
+    "vulnerabilities": [
+      {
+        "cve": "CVE-0000-10000",
+        "version": "17.0.1",
+        "type": "security",
+        "source_id": "200",
+        "summary": "First fake vulnerability",
+        "description": "A description of the first fake vulnerability",
+        "cvss_v2": "7.9",
+        "cvss_v3": "9.1",
+        "severity": "critical",
+        "url": "http://more.info",
+        "publish_date": "2021-11-04T07:30:51.991+00:00",
+        "references": [
+          "http://jfrog.com"
+        ]
+      }
+    ]
+  }
+
+]

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+    <h1 align="center">Xray Custom Integration</h1>
+    <p align="center">
+        <h2>List of Vulnerabilities by component</h2>
+        <ul>
+            {% for vuln in vulns %}
+            <li>
+                <a href="{{ url_for('vulnerabilities_view', index=loop.index0)}}">
+                    {{vuln.component_id}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <img src="/static/xray_logo.png">
+    </p>
+</body>
+</html>
