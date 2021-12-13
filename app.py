@@ -1,60 +1,61 @@
-import json
 import os
 
-from flask import Flask, render_template, abort, request, jsonify
-
-from exceptions.xray_integration_exceptions import XrayIntegrationError
-from model import vulns
+from flask import Flask, request, abort
+from flask_restful import reqparse, Api, Resource
+from model import get_vuln_by_comp
 
 app = Flask(__name__)
+api = Api(app)
+
+parser = reqparse.RequestParser()
+parser.add_argument('components', required=True)
+parser.add_argument('context', required=True)
 cnt = 0
 
-
-@app.route("/")
-def welcome():
-    return render_template("welcome.html", vulns=vulns)
-
-
-@app.route("/vulnerabilities/<int:index>")
-def vulnerabilities_view(index):
-    try:
-        vuln = vulns[index]
-        return render_template("vulnerabilities.html",
-                               comp_id=vuln['component_id'],
-                               vuln=json.dumps(vuln,
-                                               sort_keys=True,
-                                               indent=4,
-                                               separators=(',',':')),
-                               index=index,
-                               max_index=len(vulns)-1)
-    except IndexError:
-        abort(404)
+health_check = {
+    "valid": True,
+    "error": ""
+}
 
 
-@app.route("/api/checkauth")
-def checkauth():
-    try:
-        header_api_key = request.headers.get('your-header-name')
-        if header_api_key == os.getenv('INTEGRATION_KEY'):
-            resp = jsonify(success=True)
-            return resp
-    except XrayIntegrationError:
-        abort(500)
+def check_api_key():
+    """Check the Api key that was provided via headers."""
+    response = health_check
+    if 'apiKey' in request.headers:
+        header = request.headers['apiKey']
+        if header == os.getenv('API_KEY'):
+            return response
+        else:
+            response['valid'] = False
+            response['error'] = 'User api key is invalid'
+            abort(401, response)
+    else:
+        abort(400, "Failed to read header.")
 
 
-@app.route("/api/componentInfo/<component_id>", methods=['GET', 'POST'])
-def componentInfo(component_id):
-    try:
-        body = request.get_json()
-        for vuln in vulns:
-            if component_id == vuln['component_id']:
-                return vuln
-            else:
-                abort(404)
-    except XrayIntegrationError:
-        abort(500)
+class Checkauth(Resource):
+    """Validate authentication with api key."""
+    def get(self):
+        if check_api_key():
+            return "Ok."
 
 
+class ComponentInfo(Resource):
+    """Receive a component info from server by component_id."""
+    def post(self):
+        components = {"components": []}
+        if check_api_key():
+            body = request.get_json()
+            comps = [comp['component_id'] for comp in body['components']]
+            for comp in comps:
+                res = get_vuln_by_comp(comp)
+                if res is not None:
+                    components['components'].append(res)
+        return components
+
+
+api.add_resource(Checkauth, '/api/checkauth')
+api.add_resource(ComponentInfo, '/api/componentInfo')
 
 if __name__ == '__main__':
     app.run(debug=True)
